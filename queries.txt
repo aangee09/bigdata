@@ -1,0 +1,57 @@
+library(dplyr)
+set.seed(42)
+
+# Create sample data frame with match and weather info
+match_weather <- data.frame(
+    match_id = 1:10,
+    date = seq.Date(Sys.Date() - 9, Sys.Date(), by = "day"),
+    location = rep(c("Stadium A", "Stadium B"), 5),
+    temperature = round(runif(10, 5, 40), 1),
+    rain_mm = round(runif (10, 0, 10), 1),
+    wind_speed_kmh = round(runif(10, 10, 40), 1)
+)
+
+# Mutate to determine if a match is 'playable'
+# Playable: rain < 5mm AND temp >= 10 AND temp <= 35 AND wind < 30
+match_weather <- match_weather %>%
+    mutate(playable = ifelse(rain_mm < 5 & temperature >= 10 & temperature <= 35 & wind_speed_kmh < 30, TRUE, FALSE))
+
+one_time_query <- function(data) {
+    not_playable_matches <- data %>%
+        filter(playable == FALSE) # Filter for non-playable matches 
+    return(not_playable_matches)
+}
+
+cat("One-time Query: Matches not playable\n")
+print(one_time_query(match_weather)) 
+
+
+ad_hoc_query <- function(data) {
+    hot_matches <- data %>%
+        filter(temperature > 30) # Filter for matches hotter than 30C 
+    return(hot_matches)
+}
+
+cat("Ad-hoc Query: Matches with temperature > 30°C\n")
+print(ad_hoc_query(match_weather)) 
+
+
+continuous_query <- function(data, interval = 5, duration = 20) { 
+    start_time <- Sys.time()
+    repeat {
+        current_time <- Sys.time()
+        recent_data <- data %>%
+            filter(date >= (Sys.Date() - 5)) # Rolling 5-day window filter 
+        playable_count <- recent_data %>%
+            filter(playable == TRUE) %>%
+            tally() # Count of playable matches 
+        
+        cat("Continuous Query run at:", format(current_time, "%H:%M:%S"), "\n")
+        cat("Playable matches in last 5 days:", playable_count$n, "\n\n") 
+        
+        Sys.sleep(interval)
+        if (as.numeric(difftime(current_time, start_time, units = "secs")) > duration) break
+    }
+}
+
+continuous_query(match_weather, interval = 5, duration = 20)

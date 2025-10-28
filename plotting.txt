@@ -1,0 +1,81 @@
+# ✅ 1️⃣ Bar Chart
+names <- c("A", "B", "C")
+scores <- c(10, 20, 30)
+
+barplot(
+  scores,
+  names.arg = names,
+  col = "skyblue",
+  main = "Bar Chart: Scores",
+  xlab = "Names",
+  ylab = "Scores"
+)
+
+
+# ✅ 2️⃣ Pie Chart
+pie(
+  scores,
+  labels = names,
+  col = c("red", "green", "blue"),
+  main = "Pie Chart: Score Share"
+)
+
+
+# ✅ 3️⃣ Scatter Plot with Trend Line
+x <- c(1, 2, 3, 4, 5, 6, 7)
+y <- c(2, 3, 4, 6, 8, 7, 9)
+
+plot(
+  x, y,
+  pch = 19,
+  col = "darkblue",
+  main = "Scatter Plot: X vs Y",
+  xlab = "X Values",
+  ylab = "Y Values"
+)
+abline(lm(y ~ x), col = "red", lwd = 2)
+
+
+# ✅ 4️⃣ Histogram with Mean Line
+set.seed(50)
+data <- rnorm(100, mean = 50, sd = 10)
+
+hist(
+  data,
+  col = "lightgreen",
+  border = "black",
+  breaks = 10,
+  main = "Histogram of Data",
+  xlab = "Values",
+  ylab = "Frequency"
+)
+abline(v = mean(data), col = "red", lwd = 2)
+
+
+# ✅ 5️⃣ Line Plot (Sales Data Example)
+months <- c("Jan", "Feb", "Mar", "Apr", "May")
+sales <- c(80, 95, 78, 102, 110)
+
+plot(
+  sales,
+  type = "o",
+  col = "purple",
+  pch = 16,
+  main = "Line Plot: Monthly Sales",
+  xlab = "Months",
+  ylab = "Sales",
+  xaxt = "n"
+)
+axis(1, at = 1:5, labels = months)
+
+
+# ✅ 6️⃣ Boxplot (Data Distribution Example)
+set.seed(100)
+values <- rnorm(50, mean = 60, sd = 15)
+
+boxplot(
+  values,
+  col = "orange",
+  main = "Boxplot: Data Distribution",
+  ylab = "Values"
+)
